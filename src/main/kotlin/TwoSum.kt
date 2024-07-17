@@ -1,5 +1,3 @@
-import java.util.stream.IntStream.range
-
 class TwoSumSolution { // ktlint-disable filename
     fun twoSum(nums: IntArray, target: Int): IntArray {
         return nums.withIndex().mapNotNull { firstNumber ->
@@ -31,5 +29,21 @@ class TwoSumSolution { // ktlint-disable filename
         }
 
         return out.joinToString("")
+    }
+
+    fun findJudge(n: Int, trust: Array<IntArray>): Int {
+        if (trust.size === 0 && n === 1) return 1
+
+        val count = IntArray(n)
+
+        for (person in trust) {
+            count[person[0] - 1]--
+            count[person[1] - 1]++
+        }
+
+        for (person in count.indices) {
+            if (count[person] == n - 1) return person
+        }
+        return -1
     }
 }

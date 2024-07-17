@@ -24,4 +24,11 @@ class TwoSumTests {
 
         assertThat(response).isEqualTo("AB")
     }
+
+    @Test
+    fun `should find judge`() {
+        val response = subject.findJudge(3, arrayOf(intArrayOf(1, 2), intArrayOf(2, 3)))
+
+        assertThat(response).isEqualTo(-1)
+    }
 }
