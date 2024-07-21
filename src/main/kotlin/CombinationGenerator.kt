@@ -1,6 +1,8 @@
-class CombinationGenerator<T>(private val items: List<T>, choose: UInt = 1u) : Iterator<List<T>>, Iterable<List<T>> {
+class CombinationGenerator<T>(collectionOfItems: Iterable<T>, choose: UInt = 1u) : Iterator<List<T>>,
+    Iterable<List<T>> {
     private val combinationIndicies = Array(choose.toInt()) { it }
     private var first = true
+    private val items = collectionOfItems.toList()
 
     init {
         if (items.isEmpty() || choose.toInt() > items.size || choose < 1u)
@@ -55,3 +57,4 @@ fun main() {
 }
 
 infix fun <T> List<T>.choose(n: UInt) = CombinationGenerator(this, n)
+infix fun IntArray.choose(n: UInt) = CombinationGenerator(this.toList(), n)
