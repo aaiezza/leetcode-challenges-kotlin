@@ -5,8 +5,9 @@ class CombinationGenerator<T>(collectionOfItems: Iterable<T>, choose: UInt = 1u)
     private val items = collectionOfItems.toList()
 
     init {
-        if (items.isEmpty() || choose.toInt() > items.size || choose < 1u)
-            error("list must have more than 'choose' items and 'choose' min is 1")
+        require(items.isNotEmpty() && choose.toInt() <= items.size && choose >= 1u) {
+            "list must have more than 'choose' items and 'choose' min is 1"
+        }
     }
 
     override fun hasNext(): Boolean = combinationIndicies.filterIndexed { index, it ->
