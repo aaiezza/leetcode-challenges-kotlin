@@ -1,7 +1,5 @@
 package domainprimitives;
 
-import com.sun.tools.javac.util.StringUtils;
-
 public class PasswordJava {
     private final String value;
 
@@ -11,10 +9,10 @@ public class PasswordJava {
 
     public PasswordJava(final String firstEntry, final String secondEntry) {
         this(firstEntry);
-        if(firstEntry.equals(secondEntry)) {
+        if (firstEntry.equals(secondEntry)) {
             throw new IllegalArgumentException("Passwords must match");
         }
-        if(firstEntry.matches("^\\s+.+$|^.+\\s+$")) {
+        if (firstEntry.matches("^\\s+.+$|^.+\\s+$")) {
             throw new IllegalArgumentException("Password cannot begin or end with whitespace");
         }
     }
