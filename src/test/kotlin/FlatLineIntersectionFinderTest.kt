@@ -29,7 +29,7 @@ class FlatLineIntersectionFinderTest {
         val point2 = x(2.0) riseTo y(8.0)
 
         val line = FlatLine.createFlatLineFromTwoPoints(point1, point2)
-        assertThat(line).isEqualTo(FlatLine(slope = FlatLine.Slope(4.0), yIntercept = FlatLine.YIntercept(0.0)))
+        assertThat(line).isEqualTo(FLAT_LINE(slope(4), yInt(0)))
     }
 
     @Test
@@ -38,16 +38,7 @@ class FlatLineIntersectionFinderTest {
         val point2 = x(2.0) riseTo y(8.0)
 
         val line = FlatLine.createFlatLineFromTwoPoints(point1, point2)
-        assertThat(line).isEqualTo(FlatLine.Vertical(x = x(2)))
-    }
-
-    @Test
-    fun `should instantiate the expected horizontal line from sample points`() {
-        val point1 = x(1) riseTo y(4)
-        val point2 = x(2) riseTo y(4)
-
-        val line = FlatLine.createFlatLineFromTwoPoints(point1, point2)
-        assertThat(line).isEqualTo(FlatLine.Horizontal(y = y(4)))
+        assertThat(line).isEqualTo(VERTICAL_LINE(x(2)))
     }
 
     @TestFactory
@@ -57,6 +48,12 @@ class FlatLineIntersectionFinderTest {
             FLAT_LINE(slope(5), yInt(-40)),
             FLAT_LINE(slope(0.4), yInt(6)),
             x(10), y(10)
+        ),
+        input(
+            "Two more regular lines",
+            FLAT_LINE(slope(0), yInt(1)),
+            FLAT_LINE(slope(2), yInt(1)),
+            x(0), y(1)
         ),
         input(
             "Temperature Cº and Fº",
@@ -197,7 +194,7 @@ private fun y(value: Number) = Point.Y(value.toDouble())
 private fun slope(value: Number) = FlatLine.Slope(value.toDouble())
 private fun yInt(value: Number) = FlatLine.YIntercept(value.toDouble())
 
-private val HORIZONTAL_LINE: (Point.Y) -> FlatLine.Horizontal = { FlatLine.Horizontal(it) }
+private val HORIZONTAL_LINE: (Point.Y) -> FlatLine = { FlatLine(slope = slope(0), yInt(it.value)) }
 private val VERTICAL_LINE: (Point.X) -> FlatLine.Vertical = { FlatLine.Vertical(it) }
 private val FLAT_LINE: (FlatLine.Slope, FlatLine.YIntercept) -> FlatLine =
     { slope, yInt -> FlatLine(slope, yInt) }

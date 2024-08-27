@@ -6,7 +6,7 @@ data class Point(val x: X, val y: Y) {
     data class Y(val value: Double)
 
     override fun toString(): String =
-        "(%.10f, %.10f)".format(x.value, y.value)
+        "(%.1f, %.1f)".format(x.value, y.value)
 }
 
 open class FlatLine(
@@ -20,8 +20,6 @@ open class FlatLine(
 
             return if (point1.x == point2.x) {
                 Vertical(point1.x)
-            } else if (point1.y == point2.y) {
-                Horizontal(point1.y)
             } else {
                 val slope = Slope((point2.y.value - point1.y.value) / (point2.x.value - point1.x.value))
                 FlatLine(
@@ -34,14 +32,14 @@ open class FlatLine(
 
     data class Slope(val value: Double) {
         fun yInterceptFrom(point: Point) = YIntercept(point.y.value - (value * point.x.value))
-        fun xInterceptFrom(point: Point) = XIntercept((-yInterceptFrom(point).value) / value)
+        fun xInterceptFrom(point: Point) = XIntercept(point.x.value - (point.y.value / value))
     }
 
     data class YIntercept(val value: Double)
     data class XIntercept(val value: Double)
 
     override fun toString(): String =
-        "y=%.10fx%+.10f".format(slope.value, yIntercept.value)
+        "y=%.1fx%+.1f".format(slope.value, yIntercept.value)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -69,11 +67,6 @@ open class FlatLine(
         ) {
         override fun toString(): String = "x=%.1f".format(xIntercept.value)
     }
-
-    class Horizontal(y: Point.Y) :
-        FlatLine(slope = Slope(0.0), yIntercept = YIntercept(y.value), xIntercept = XIntercept(Double.NaN)) {
-        override fun toString(): String = "y=%.1f".format(yIntercept.value)
-    }
 }
 
 class FlatLineIntersectionFinder {
@@ -86,6 +79,7 @@ class FlatLineIntersectionFinder {
             ?.let { it.xIntercept.value }
             ?: ((line2.yIntercept.value - line1.yIntercept.value) /
                     (line1.slope.value - line2.slope.value)))
+            .let { if(it == -0.0) 0.0 else it }
             .let { Point.X(it) }
 
         val y: Point.Y = if (line1 is FlatLine.Vertical) {
